@@ -1,3 +1,4 @@
 venv/
 T3.1_Math_Tutor/__pycache__/
 *.pyc   
+tutor/__pycache__/
