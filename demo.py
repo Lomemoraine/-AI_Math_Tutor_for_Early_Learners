@@ -196,8 +196,7 @@ def build_ui():
         gr.Markdown(
             """
             # 🧮 AI Math Tutor for Early Learners
-            **AIMS KTT Hackathon · S2.T3.1** · Works fully offline · Ages 5–9
-            ---
+            Welcome to the AI Math Tutor demo! This interactive tutor adapts to your learning needs, providing personalized math problems and feedback in multiple languages.---
             """
         )
 

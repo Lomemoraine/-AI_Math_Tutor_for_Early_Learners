@@ -91,10 +91,10 @@ CREATE TABLE IF NOT EXISTS responses (
 
 
 class ProgressStore:
-    def __init__(self, db_path: str = None): 
+    def __init__(self, db_path: str = None): # type: ignore 
         self.db_path = Path(db_path) if db_path else DB_PATH
         self._key = _load_or_create_key()
-        self._conn = sqlite3.connect(str(self.db_path))
+        self._conn = sqlite3.connect(str(self.db_path), check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
         self._conn.executescript(SCHEMA)
         self._conn.commit()
@@ -155,8 +155,8 @@ class ProgressStore:
         )
         self._conn.commit()
         sid = cur.lastrowid
-        self._current_session[learner_id] = sid
-        return sid
+        self._current_session[learner_id] = sid # type: ignore
+        return sid # type: ignore
 
     def end_session(self, learner_id: str):
         sid = self._current_session.get(learner_id)
@@ -191,7 +191,7 @@ class ProgressStore:
     # ------------------------------------------------------------------
     # Report queries
     # ------------------------------------------------------------------
-    def weekly_summary(self, learner_id: str, week_start: date = None) -> Dict:
+    def weekly_summary(self, learner_id: str, week_start: date = None) -> Dict: # type: ignore
         """Aggregate weekly stats per skill for parent report."""
         if week_start is None:
             week_start = date.today() - timedelta(days=date.today().weekday())
