@@ -93,26 +93,25 @@ def _progress_display(session: dict) -> str:
 
 
 def chat(user_message: str, history: list, learner_id: str, lang: str):
-    """Main chat handler."""
     learner_id = learner_id.strip() or "learner_001"
     lang = lang or "en"
-
     session = _get_or_create_session(learner_id, lang)
 
     if not user_message.strip():
-        # Silence handler
         response = SILENCE_PROMPT.get(lang, SILENCE_PROMPT["en"])
         if session["current_item"] is None:
             response += "\n\n" + _present_item(session)
-        history.append((user_message, response))
+        history.append({"role": "user", "content": user_message})
+        history.append({"role": "assistant", "content": response})
         return history, ""
-
-    # First interaction — greet and present first item
+    
+    # First interaction
     if session["current_item"] is None and len(history) == 0:
         greeting = WELCOME.get(lang, WELCOME["en"])
         first_item = _present_item(session)
         response = greeting + "\n\n" + first_item
-        history.append((user_message, response))
+        history.append({"role": "user", "content": user_message})
+        history.append({"role": "assistant", "content": response})
         return history, ""
 
     # Check if this is a name response (first message)
