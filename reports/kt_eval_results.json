@@ -1,0 +1,7 @@
+{
+  "n_learners": 20,
+  "n_observations": 800,
+  "BKT_AUC": 0.4978,
+  "Elo_AUC": 0.5272,
+  "BKT_wins": false
+}

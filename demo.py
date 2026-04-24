@@ -5,6 +5,7 @@ Run: python demo.py
 """
 
 import json
+from urllib import response
 import gradio as gr
 from pathlib import Path
 import sys
@@ -35,9 +36,9 @@ EMOJI_SKILLS = {
 }
 
 WELCOME = {
-    "en": "👋 Hello! I am your Math Tutor. What is your name?",
+    "en": "👋 Hello! I am your Math Tutor.",
     "fr": "👋 Bonjour! Je suis ton tuteur de maths. Comment t'appelles-tu?",
-    "kin": "👋 Muraho! Ndi umwarimu wawe w'imibare. Witwa nde?",
+    "kin": "👋 Muraho! Ndi umwarimu wawe w'imibare. ",
 }
 
 SILENCE_PROMPT = {
@@ -118,14 +119,16 @@ def chat(user_message: str, history: list, learner_id: str, lang: str):
     if len(history) <= 1 and session["current_item"] is None:
         first_item = _present_item(session)
         response = f"Nice to meet you, **{user_message.title()}**! 😊\n\nLet's start!\n\n{first_item}"
-        history.append((user_message, response))
+        history.append({"role": "user", "content": user_message})
+        history.append({"role": "assistant", "content": response})
         return history, ""
 
     # --- Answer processing ---
     item = session["current_item"]
     if item is None:
         item_str = _present_item(session)
-        history.append((user_message, item_str))
+        history.append({"role": "user", "content": user_message})
+        history.append({"role": "assistant", "content":  item_str})
         return history, ""
 
     # Language detection
@@ -143,7 +146,8 @@ def chat(user_message: str, history: list, learner_id: str, lang: str):
             "fr": f"Hmm, je n'ai pas compris! Essaie d'écrire juste le chiffre. 😊",
             "kin": f"Hmm, sinabibonye! Gerageza kwandika umubare gusa. 😊",
         }
-        history.append((user_message, prompts.get(reply_lang, prompts["en"])))
+        history.append({"role": "user", "content": user_message})
+        history.append({"role": "assistant", "content": prompts.get(reply_lang, prompts["en"])})
         return history, ""
 
     correct = (numeric_ans == correct_ans)
@@ -175,7 +179,8 @@ def chat(user_message: str, history: list, learner_id: str, lang: str):
     next_item_str = _present_item(session)
 
     response = f"{feedback}{progress_str}\n\n---\n\n{next_item_str}"
-    history.append((user_message, response))
+    history.append({"role": "user", "content": user_message})
+    history.append({"role": "assistant", "content": response})
     return history, ""
 
 
@@ -185,7 +190,7 @@ def chat(user_message: str, history: list, learner_id: str, lang: str):
 def build_ui():
     with gr.Blocks(
         title="🧮 AI Math Tutor",
-        theme=gr.themes.Soft(),
+        theme=gr.themes.Soft(), # type: ignore
         css="""
         .gradio-container { max-width: 800px; margin: auto; }
         .chatbot { font-size: 1.1em; }
