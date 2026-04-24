@@ -14,6 +14,8 @@ from datetime import datetime, date, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from torch.jit import ignore
+
 # Encryption: use cryptography.fernet if available, else base64 obfuscation
 try:
     from cryptography.fernet import Fernet
@@ -89,7 +91,7 @@ CREATE TABLE IF NOT EXISTS responses (
 
 
 class ProgressStore:
-    def __init__(self, db_path: str = None):
+    def __init__(self, db_path: str = None): 
         self.db_path = Path(db_path) if db_path else DB_PATH
         self._key = _load_or_create_key()
         self._conn = sqlite3.connect(str(self.db_path))
@@ -258,7 +260,7 @@ def add_laplace_noise(value: float, sensitivity: float, epsilon: float) -> float
 def dp_aggregate_stats(store: ProgressStore,
                        skill: str,
                        epsilon: float = 1.0,
-                       week_start: date = None) -> Dict:
+                       week_start: date = None) -> Dict: # type: ignore
     """
     Compute DP-noised aggregate correctness across all learners for a skill.
     ε budget: epsilon per learner per week (documented).

@@ -1,10 +1,3 @@
-"""
-asr_adapt.py
-ASR adaptation layer for child speech (EN / FR / KIN).
-Uses openai/whisper-tiny as the base model.
-Applies pitch-shift augmentation and child-voice fine-tuning hooks.
-Fully offline at inference.
-"""
 
 import os
 import re

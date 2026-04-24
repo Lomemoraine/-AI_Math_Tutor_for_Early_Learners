@@ -1,5 +1,12 @@
+"""
+curriculum_loader.py
+Loads the seed curriculum (12 items), validates schema,
+and expands to 60+ items via deterministic augmentation.
+"""
+
 import json
 import copy
+import random
 from pathlib import Path
 from typing import List, Dict, Optional
 
@@ -62,13 +69,6 @@ WORD_PROBLEMS = [
 def load_seed(seed_path: str) -> List[Dict]:
     with open(seed_path, "r", encoding="utf-8") as f:
         return json.load(f)
-
-
-def save_curriculum(items: List[Dict], outpath: str):
-    p = Path(outpath)
-    p.parent.mkdir(parents=True, exist_ok=True)
-    with p.open("w", encoding="utf-8") as f:
-        json.dump(items, f, ensure_ascii=False, indent=2)
 
 
 def _make_id(prefix: str, idx: int) -> str:
@@ -213,18 +213,7 @@ class CurriculumLoader:
 
 
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser(description="Generate expanded curriculum from seed.")
-    parser.add_argument("seed", nargs="?", default="T3.1_Math_Tutor/curriculum_seed.json",
-                        help="Path to seed curriculum JSON")
-    parser.add_argument("--out", default="T3.1_Math_Tutor/curriculum_expanded.json",
-                        help="Output path for expanded curriculum (will be created)")
-    args = parser.parse_args()
-    loader = CurriculumLoader(args.seed)
-    summary = loader.summary()
-    print(json.dumps(summary, indent=2))
-    try:
-        save_curriculum(loader.items, args.out)
-        print(f"Saved expanded curriculum to {args.out}")
-    except Exception as e:
-        print(f"Warning: failed to save curriculum to {args.out}: {e}")
+    import sys
+    path = sys.argv[1] if len(sys.argv) > 1 else "T3.1_Math_Tutor/curriculum_seed.json"
+    loader = CurriculumLoader(path)
+    print(json.dumps(loader.summary(), indent=2))

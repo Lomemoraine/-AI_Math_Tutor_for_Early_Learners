@@ -8,7 +8,7 @@
     "stem_fr": "Combien de pommes?",
     "stem_kin": "Pome zingahe?",
     "visual": "apples_3",
-    "answer_int": 3,
+    "answer_int": 3,s
     "tts_en": "tts/en/c001.wav",
     "tts_fr": "tts/fr/c001.wav",
     "tts_kin": "tts/kin/c001.wav"
