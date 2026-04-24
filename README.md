@@ -117,20 +117,6 @@ Target: ≤ 75 MB (excluding TTS cache).
 
 ---
 
-## Technical Constraints Met
-
-| Constraint | Status |
-|---|---|
-| CPU-only inference | ✅ |
-| Fully offline at inference | ✅ |
-| App footprint ≤ 75 MB | ✅ (see footprint_report.md) |
-| Latency < 2.5s per cycle | ✅ (text mode); ASR adds ~1–2s |
-| No dark patterns | ✅ No streaks, no purchases, no trackers |
-| Encrypted local storage | ✅ Fernet AES-128 |
-| Differential privacy sync | ✅ ε=1.0 Laplace noise |
-| Multilingual EN/FR/KIN | ✅ |
-
----
 
 ## Product & Business Adaptation
 
